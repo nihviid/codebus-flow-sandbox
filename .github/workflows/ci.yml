@@ -1,0 +1,28 @@
+# SR/C11 rehearsal sandbox. The gate is fixtures.py: kind comes from workflow_dispatch input, else from fixture.txt.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "fixture kind: pass | fail | flaky"
+        required: false
+        default: ""
+permissions:
+  contents: read
+jobs:
+  gate:
+    name: CI Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run fixture
+        env:
+          INPUT_KIND: ${{ github.event.inputs.kind }}
+        run: |
+          kind="${INPUT_KIND:-$(head -n1 fixture.txt | tr -d '[:space:]')}"
+          echo "fixture kind: $kind sha: $GITHUB_SHA"
+          python3 fixtures.py "$kind" --sha "$GITHUB_SHA" --seed 1

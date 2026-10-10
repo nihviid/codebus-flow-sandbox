@@ -1,0 +1,31 @@
+# Mirror of code-factory's queue (batch_size 3), gate = "CI Gate". Sandbox only.
+merge_queue:
+  max_parallel_checks: 3
+
+queue_rules:
+  - name: default
+    merge_method: squash
+    batch_size: 3
+    batch_max_wait_time: 3 min
+    checks_timeout: 45 min
+    queue_conditions:
+      - -check-failure=CI Gate
+    merge_conditions:
+      - check-success=CI Gate
+
+priority_rules:
+  - name: main repair first
+    conditions:
+      - head~=^ovn/fix-main
+    priority: high
+
+pull_request_rules:
+  - name: queue PRs labelled automerge
+    conditions:
+      - label=automerge
+      - -draft
+      - -conflict
+      - -label~=^(hold|wip|do-not-merge)$
+    actions:
+      queue:
+        name: default
