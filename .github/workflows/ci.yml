@@ -26,3 +26,8 @@ jobs:
           kind="${INPUT_KIND:-$(head -n1 fixture.txt | tr -d '[:space:]')}"
           echo "fixture kind: $kind sha: $GITHUB_SHA"
           python3 fixtures.py "$kind" --sha "$GITHUB_SHA" --seed 1
+      - name: Burst X1 (red only on the Mergify queue branch)
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ -f burst/x1.txt ] && [[ "$HEAD_REF" == mergify/merge-queue/* ]]; then echo "X1 present on a queue branch: RED"; exit 1; fi
