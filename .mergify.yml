@@ -1,11 +1,11 @@
-# trial8 config C
+# trial8 config B
 merge_queue:
-  max_parallel_checks: 3
+  max_parallel_checks: 1
 
 queue_rules:
   - name: default
     merge_method: squash
-    batch_size: 3
+    batch_size: 1
     batch_max_wait_time: 1 min
     checks_timeout: 45 min
     queue_conditions:
@@ -20,24 +20,12 @@ priority_rules:
     priority: high
 
 pull_request_rules:
-  - name: merge green up-to-date PRs now
-    conditions:
-      - label=automerge
-      - -draft
-      - -conflict
-      - -label~=^(hold|wip|do-not-merge)$
-      - "#commits-behind=0"
-      - check-success=CI Gate
-    actions:
-      merge:
-        method: squash
   - name: queue PRs labelled automerge
     conditions:
       - label=automerge
       - -draft
       - -conflict
       - -label~=^(hold|wip|do-not-merge)$
-      - "#commits-behind>0"
     actions:
       queue:
         name: default
