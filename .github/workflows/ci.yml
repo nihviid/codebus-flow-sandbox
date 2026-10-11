@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - name: Simulated CI time
+        run: sleep $(cat burst/sleep.txt 2>/dev/null || echo 0)
       - name: Run fixture
         env:
           INPUT_KIND: ${{ github.event.inputs.kind }}
