@@ -1,4 +1,4 @@
-# Mirror of code-factory's queue (batch_size 3), gate = "CI Gate". Sandbox only.
+# trial8 config A
 merge_queue:
   max_parallel_checks: 3
 
@@ -6,10 +6,10 @@ queue_rules:
   - name: default
     merge_method: squash
     batch_size: 3
-    batch_max_wait_time: 3 min
+    batch_max_wait_time: 1 min
     checks_timeout: 45 min
     queue_conditions:
-      - -check-failure=CI Gate
+      - check-success=CI Gate
     merge_conditions:
       - check-success=CI Gate
 
