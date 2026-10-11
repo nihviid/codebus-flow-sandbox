@@ -1,4 +1,4 @@
-# trial8 config C
+# trial8 config A
 merge_queue:
   max_parallel_checks: 3
 
@@ -20,24 +20,12 @@ priority_rules:
     priority: high
 
 pull_request_rules:
-  - name: merge green up-to-date PRs now
-    conditions:
-      - label=automerge
-      - -draft
-      - -conflict
-      - -label~=^(hold|wip|do-not-merge)$
-      - "#commits-behind=0"
-      - check-success=CI Gate
-    actions:
-      merge:
-        method: squash
   - name: queue PRs labelled automerge
     conditions:
       - label=automerge
       - -draft
       - -conflict
       - -label~=^(hold|wip|do-not-merge)$
-      - "#commits-behind>0"
     actions:
       queue:
         name: default
