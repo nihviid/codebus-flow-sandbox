@@ -1,11 +1,11 @@
-# trial8 config A
+# trial8 config B
 merge_queue:
-  max_parallel_checks: 3
+  max_parallel_checks: 1
 
 queue_rules:
   - name: default
     merge_method: squash
-    batch_size: 3
+    batch_size: 1
     batch_max_wait_time: 1 min
     checks_timeout: 45 min
     queue_conditions:
